@@ -9,6 +9,8 @@ zposter_namespace: "{{ namespace }}"
 ingress_name: zposter
 domain: zposter.36node.com
 
+mongodb_connection: mongodb://root:it_is_a_secret@mongodb
+
 content_version: latest
 content_image: "registry.cn-hongkong.aliyuncs.com/36node/content:{{ content_version }}"
 content_time: 20210804120000
@@ -17,7 +19,7 @@ content_path: /content/v0
 content_mongodb_connection: "{{ mongodb_connection }}/core?authSource=admin"
 
 web_version: latest
-web_image: "registry.cn-hongkong.aliyuncs.com/36node/zposter-web:{{ content_version }}"
+web_image: "registry.cn-hongkong.aliyuncs.com/36node/zposter-web:{{ web_version }}"
 web_time: 20210804120000
 web_storage_bucket: https://static.36node.com
 web_content_path: https://api.zposter.36node.com/content/v0

@@ -22,7 +22,8 @@ spec:
               serviceName: content
               servicePort: 80
             path: /content
-  # tls:
-  #   - hosts:
-  #       - zposter.36node.com
-  #     secretName: zposter.36node.com
+  tls:
+    - hosts:
+        - "{{ domain }}"
+        - "*.{{ domain }}"
+      secretName: "{{ domain }}"

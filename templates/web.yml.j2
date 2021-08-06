@@ -41,6 +41,8 @@ spec:
         - name: web
           image: "{{ web_image }}"
           env:
+            - name: DEPLOY_TIME
+              value: "{{ web_time }}"
             - name: REACT_APP_STORAGE_BUCKET_HOST
               value: "{{ web_storage_bucket }}"
             - name: APP_CONTENT_BASE
