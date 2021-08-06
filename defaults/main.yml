@@ -1,0 +1,26 @@
+---
+# defaults file for zposter
+namespace: zposter
+state: present
+
+zposter_state: "{{ state }}"
+zposter_namespace: "{{ namespace }}"
+
+ingress_name: zposter
+domain: zposter.36node.com
+
+content_version: latest
+content_image: "registry.cn-hongkong.aliyuncs.com/36node/content:{{ content_version }}"
+content_time: 20210804120000
+content_port: "80"
+content_path: /content/v0
+content_mongodb_connection: "{{ mongodb_connection }}/core?authSource=admin"
+
+web_version: latest
+web_image: "registry.cn-hongkong.aliyuncs.com/36node/zposter-web:{{ content_version }}"
+web_time: 20210804120000
+web_storage_bucket: https://static.36node.com
+web_content_path: https://api.zposter.36node.com/content/v0
+web_auth_path: https://api.stargate.36node.com/auth/v0
+web_auth_provider: 5cb9a4edc48ad400120d28a7
+web_health_path: /

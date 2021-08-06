@@ -1,0 +1,28 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: "{{ ingress_name }}"
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    cert-manager.io/cluster-issuer: "{{ cert_issuer }}"
+spec:
+  rules:
+    - host: "{{ domain }}"
+      http:
+        paths:
+          - backend:
+              serviceName: web
+              servicePort: 80
+            path: /
+    - host: api.{{ domain }}
+      http:
+        paths:
+          - backend:
+              serviceName: content
+              servicePort: 80
+            path: /content
+  # tls:
+  #   - hosts:
+  #       - zposter.36node.com
+  #     secretName: zposter.36node.com
