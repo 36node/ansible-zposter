@@ -1,29 +1,62 @@
+#jinja2: lstrip_blocks: "True", trim_blocks: "True"
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: strip-path-prefix
+spec:
+  stripPrefix:
+    forceSlash: false
+    prefixes:
+      - /api
+
+---
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: "{{ ingress_name }}"
   annotations:
-    kubernetes.io/ingress.class: traefik
+    kubernetes.io/ingress.class: "{{ ingress_class }}"
+{% if tls_enabled %}
     cert-manager.io/cluster-issuer: "{{ cert_issuer }}"
+{% endif %}
+    traefik.ingress.kubernetes.io/router.middlewares: "{{ namespace }}-strip-path-prefix@kubernetescrd"
 spec:
   rules:
     - host: "{{ domain }}"
       http:
         paths:
-          - backend:
-              serviceName: web
-              servicePort: 80
+          - pathType: Prefix
             path: /
-    - host: api.{{ domain }}
+            backend:
+              service:
+                name: web
+                port:
+                  number: 80
+    - host: "{{ domain }}"
       http:
         paths:
-          - backend:
-              serviceName: content
-              servicePort: 80
+          - path: /api/content
+            pathType: Prefix
+            backend:
+              service:
+                name: content
+                port:
+                  number: 80
+    - host: "api.{{ domain }}"
+      http:
+        paths:
+          - pathType: Prefix
             path: /content
+            backend:
+              service:
+                name: content
+                port:
+                  number: 80
+{% if tls_enabled %}
   tls:
     - hosts:
-        - "{{ domain }}"
+        - {{ domain }}
         - "*.{{ domain }}"
       secretName: "{{ domain }}"
+{% endif %}

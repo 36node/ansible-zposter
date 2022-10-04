@@ -2,11 +2,13 @@
 # defaults file for zposter
 namespace: zposter
 state: present
+tls_enabled: true
 
 zposter_state: "{{ state }}"
 zposter_namespace: "{{ namespace }}"
 
 ingress_name: zposter
+ingress_class: traefik
 domain: zposter.36node.com
 
 mongodb_connection: mongodb://root:it_is_a_secret@mongodb
